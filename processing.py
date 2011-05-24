@@ -66,6 +66,10 @@ for data in list2:
 
 ### @export "plotting-curve"
 test = SasPlot(subtracted_data[0])
+test.axes.set_autoscale_on(False)
+test.axes.set_ybound(0)
+test.axes.set_xbound(0.01)
+test.axes.loglog()
 test.figure.savefig("test.png")
 
 tracking.close()
