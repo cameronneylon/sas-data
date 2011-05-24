@@ -55,7 +55,7 @@ class SasData(object):
         # addition of two SasData objects
         if isinstance(other, SasData):
             assert len(self) == len(other), 'datasets not the same length'
-	    assert self.q == other.q, 'q values not the same'
+	    assert all(self.q) == all(other.q), 'q values not the same'
 
             # initialize a SasData object with zero for all intensities
 	    out = SasData(self.q, ([0] * len(self)))
@@ -84,7 +84,7 @@ class SasData(object):
         # addition of two SasData objects
         if isinstance(other, SasData):
             assert len(self) == len(other), 'datasets not the same length'
-	    assert self.q == other.q, 'q values not the same'
+	    assert all(self.q) == all(other.q), 'q values not the same'
 
             # initialize a SasData object with zero for all intensities
 	    out = SasData(self.q, ([0] * len(self)))
@@ -157,7 +157,7 @@ class ExpSasData(SasData):
     def set_instrument(self, instrument):
         try:
             assert type(instrument) == str
-            assert instrument in {'loq', 'sans2d', 'i22'}
+            assert instrument in ['loq', 'sans2d', 'i22', 'I22']
         except AssertionError:
             raise TypeError
 
@@ -344,6 +344,7 @@ class SasPlot(fig.Figure):
         """__init__ routine creates a plot with default features.
 
         """
+
 
         self.figure = plt.figure()
         self.axes = self.figure.add_subplot(1,1,1)

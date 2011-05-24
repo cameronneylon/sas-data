@@ -3,6 +3,9 @@
   "*.py|pyg" : {},
   "*.sh|pyg" : {},
   "*.py|idio" : {},
+  "*.py|idio|py" : {
+     "env" : {"PYTHONPATH" : "../"}},
+  "*.txt|idio" : {},
   "*.md|jinja|markdown|hd|ft" : {
     "allinputs" : true
   },

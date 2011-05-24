@@ -1,6 +1,6 @@
 ### @export "imports"
-from sas import *
-from proxy import *
+from libs.sas import *
+from libs.proxy import *
 from numpy import *
 import urllib2
 import urllib
@@ -60,13 +60,20 @@ def get_data(posturl):
     ### @export "gdfp-data-to-SASData"
     datafile = urllib2.urlopen(fileurl).readlines()
 
-    data = loadtxt(datafile, skiprows=3)
+
+    try:
+        data = loadtxt(datafile, skiprows=3)
+    except:
+        data = loadtxt(datafile, skiprows=4)
     data_q = data[:,0]
     data_i = data[:,1]
 
     sas_data = ExpSasData(data_q, data_i)
-    sas_data.set_instrument(parsedresponse.find('post').find('metadata'
-                                          ).find('instrument').text)
+    instrument = parsedresponse.find('post').find('metadata'
+                                          ).find('instrument').text
+    sas_data.set_instrument(instrument)
     sas_data.set_id(parsedresponse.find('post').find('title').text)
+
+    return sas_data
                            
 

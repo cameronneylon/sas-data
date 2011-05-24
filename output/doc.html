@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <style type="text/css">
+      .hll { background-color: #ffffcc }
+      .c { color: #888888 } /* Comment */
+      .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+      .k { color: #008800; font-weight: bold } /* Keyword */
+      .cm { color: #888888 } /* Comment.Multiline */
+      .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+      .c1 { color: #888888 } /* Comment.Single */
+      .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+      .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+      .ge { font-style: italic } /* Generic.Emph */
+      .gr { color: #aa0000 } /* Generic.Error */
+      .gh { color: #303030 } /* Generic.Heading */
+      .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+      .go { color: #888888 } /* Generic.Output */
+      .gp { color: #555555 } /* Generic.Prompt */
+      .gs { font-weight: bold } /* Generic.Strong */
+      .gu { color: #606060 } /* Generic.Subheading */
+      .gt { color: #aa0000 } /* Generic.Traceback */
+      .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+      .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+      .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+      .kp { color: #008800 } /* Keyword.Pseudo */
+      .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+      .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+      .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+      .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+      .na { color: #336699 } /* Name.Attribute */
+      .nb { color: #003388 } /* Name.Builtin */
+      .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+      .no { color: #003366; font-weight: bold } /* Name.Constant */
+      .nd { color: #555555 } /* Name.Decorator */
+      .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+      .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+      .nl { color: #336699; font-style: italic } /* Name.Label */
+      .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+      .py { color: #336699; font-weight: bold } /* Name.Property */
+      .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+      .nv { color: #336699 } /* Name.Variable */
+      .ow { color: #008800 } /* Operator.Word */
+      .w { color: #bbbbbb } /* Text.Whitespace */
+      .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+      .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+      .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+      .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+      .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+      .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+      .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+      .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+      .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+      .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+      .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+      .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+      .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+      .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+      .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+      .bp { color: #003388 } /* Name.Builtin.Pseudo */
+      .vc { color: #336699 } /* Name.Variable.Class */
+      .vg { color: #dd7700 } /* Name.Variable.Global */
+      .vi { color: #3333bb } /* Name.Variable.Instance */
+      .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+    </style>
+  </head>
+  <body>
+
+<h1>Record of using sas.py to process data from SM6717-1</h1>
+<h1>Outline</h1>
+<p>We collected data on I22 in mid-May on a range of SMALPs and this data was uploaded to the lab notebook system at http://biolab.isis.rl.ac.uk The aim here is to record the process of grabbing data from the notebook and processing it using some Python scripts.</p>
+<h1>Getting the data post URLs</h1>
+<p>First we set a general blog URL and a date range to get data for.</p>
+<div class="highlight"><pre><a name="l-1"></a><span class="n">BLOG_URL</span> <span class="o">=</span> <span class="s">&quot;http://biolab.isis.rl.ac.uk/camerons_labblog&quot;</span>
+<a name="l-2"></a><span class="n">FROM_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s">&#39;2011-03-01&#39;</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
+<a name="l-3"></a><span class="n">TO_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s">&#39;2011-06-01&#39;</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>For this experiment I need to get I22 SAXS data files. The key is DATA_TYPE and the value is SAXS_Diamond.</p>
+<div class="highlight"><pre><a name="l-1"></a><span class="n">saxs_data_posts</span> <span class="o">=</span> <span class="n">getposts</span><span class="p">(</span><span class="n">BLOG_URL</span><span class="p">,</span> <span class="s">&quot;DATA_TYPE&quot;</span><span class="p">,</span> <span class="s">&quot;SAXS_Diamond&quot;</span><span class="p">,</span>
+<a name="l-2"></a>                             <span class="n">FROM_DATE</span><span class="p">,</span> <span class="n">TO_DATE</span><span class="p">)</span> 
+</pre></div>
+
+<p>There are <div class="highlight"><pre><a name="l-1"></a>33
+</pre></div>
+ data files found between the dates set. Which are named:</p>
+<div class="highlight"><pre><a name="l-1"></a>I22-29552, I22 29553 - b4, I22 29554 - buffer, I22 29590 - A4, I22 29555 - b3, I22 29556 - empty capillary, I22 29557 - b2, I22 29558 - b1, I22 29559 - water, I22 29589 - A5, I22 29560 - b4, I22 29561 - buffer, I22 29562 - b3, I22 29588 - A6, I22 29563 - empty capillary, I22 29564 - b2, I22 29565 - b1, I22 29587 A7, I22 29567 - DLPC - lower counts, I22 29574 - A3 - seems ok, I22 29575 - a2, I22 29576 - a1, I22 29586 A8, I22 29577 - mono-olein, I22 29578 - DMPC, I22 29579 - b9, I22 29585 - A9, I22 29580 - b8, I22 29581 - b7, I22 29582 - b6, I22 29584-DLPC, I22 29583 - b5, I22 29591 BUFFER, 
+</pre></div>
+
+<p>Of these "I22 29554 - buffer", "I22 29561 - Buffer", and "I22 29591 BUFFER" are the buffer runs. The first of these was for a shorter collection time as are the runs up to 29558 according to the <a href="http://biolab.isis.rl.ac.uk/camerons_labblog/14220/SAXS_on_SMALP_samples_1.html">run record for the first set of samples</a>. </p>
+<p>The sample runs from 29560 to 29565 should have the buffer run 29561 subtracted.</p>
+<div class="highlight"><pre><a name="l-1"></a><span class="n">subtracted_data</span> <span class="o">=</span> <span class="p">[]</span>
+<a name="l-2"></a><span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;I22 29560 - b4&#39;</span><span class="p">,</span> <span class="s">&#39;I22 29562 - b3&#39;</span><span class="p">,</span> <span class="s">&#39;I22 29564 - b2&#39;</span><span class="p">,</span>
+<a name="l-3"></a>               <span class="s">&#39;I22 29565 - b1&#39;</span><span class="p">]</span>
+<a name="l-4"></a>
+<a name="l-5"></a><span class="n">background</span> <span class="o">=</span> <span class="s">&#39;I22 29561 - buffer&#39;</span>
+<a name="l-6"></a>
+<a name="l-7"></a><span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">list1</span><span class="p">:</span>
+<a name="l-8"></a>    <span class="n">subtracted</span> <span class="o">=</span> <span class="n">sas_patterns</span><span class="p">[</span><span class="n">name_mapping</span><span class="p">[</span><span class="n">data</span><span class="p">]]</span> <span class="o">-</span> <span class="n">sas_patterns</span><span class="p">[</span>
+<a name="l-9"></a>                                           <span class="n">name_mapping</span><span class="p">[</span><span class="n">background</span><span class="p">]]</span>
+<a name="l-10"></a>    <span class="n">subtracted_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subtracted</span><span class="p">)</span>
+</pre></div>
+
+<p>The second set of runs are handled similarly</p>
+<div class="highlight"><pre><a name="l-1"></a><span class="n">list2</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;I22 29574 - A3 - seems ok&#39;</span><span class="p">,</span>
+<a name="l-2"></a><span class="s">&#39;I22 29575 - a2&#39;</span><span class="p">,</span>
+<a name="l-3"></a><span class="s">&#39;I22 29576 - a1&#39;</span><span class="p">,</span>
+<a name="l-4"></a><span class="s">&#39;I22 29577 - mono-olein&#39;</span><span class="p">,</span>
+<a name="l-5"></a><span class="s">&#39;I22 29578 - DMPC&#39;</span><span class="p">,</span>
+<a name="l-6"></a><span class="s">&#39;I22 29579 - b9&#39;</span><span class="p">,</span>
+<a name="l-7"></a><span class="s">&#39;I22 29580 - b8&#39;</span><span class="p">,</span>
+<a name="l-8"></a><span class="s">&#39;I22 29581 - b7&#39;</span><span class="p">,</span>
+<a name="l-9"></a><span class="s">&#39;I22 29582 - b6&#39;</span><span class="p">,</span>
+<a name="l-10"></a><span class="s">&#39;I22 29583 - b5&#39;</span><span class="p">,</span>
+<a name="l-11"></a><span class="s">&#39;I22 29584-DLPC&#39;</span><span class="p">,</span>
+<a name="l-12"></a><span class="s">&#39;I22 29585 - A9&#39;</span><span class="p">,</span>
+<a name="l-13"></a><span class="s">&#39;I22 29586 A8&#39;</span><span class="p">,</span>
+<a name="l-14"></a><span class="s">&#39;I22 29587 A7&#39;</span><span class="p">,</span>
+<a name="l-15"></a><span class="s">&#39;I22 29588 - A6&#39;</span><span class="p">,</span>
+<a name="l-16"></a><span class="s">&#39;I22 29589 - A5&#39;</span><span class="p">,</span>
+<a name="l-17"></a><span class="s">&#39;I22 29590 - A4&#39;</span><span class="p">]</span>
+<a name="l-18"></a>
+<a name="l-19"></a><span class="n">background</span> <span class="o">=</span> <span class="s">&#39;I22 29591 BUFFER&#39;</span>
+<a name="l-20"></a>
+<a name="l-21"></a><span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">list2</span><span class="p">:</span>
+<a name="l-22"></a>    <span class="n">subtracted</span> <span class="o">=</span> <span class="n">sas_patterns</span><span class="p">[</span><span class="n">name_mapping</span><span class="p">[</span><span class="n">data</span><span class="p">]]</span> <span class="o">-</span> <span class="n">sas_patterns</span><span class="p">[</span>
+<a name="l-23"></a>                                           <span class="n">name_mapping</span><span class="p">[</span><span class="n">background</span><span class="p">]]</span>
+<a name="l-24"></a>    <span class="n">subtracted_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subtracted</span><span class="p">)</span>
+</pre></div>
+
+<p>Here is a graph</p>
+<p><img src="../artifacts/test.png"> </p>
+  </body>
+</html>
+
