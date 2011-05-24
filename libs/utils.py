@@ -65,4 +65,8 @@ def get_data(posturl):
     data_i = data[:,1]
 
     sas_data = ExpSasData(data_q, data_i)
+    sas_data.set_instrument(parsedresponse.find('post').find('metadata'
+                                          ).find('instrument').text)
+    sas_data.set_id(parsedresponse.find('post').find('title').text)
+                           
 

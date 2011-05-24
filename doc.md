@@ -14,7 +14,4 @@ For this experiment I need to get I22 SAXS data files. The key is DATA_TYPE and 
 
 {{ d['processing.py|idio']['retrieving-data-pages'] }}
 
-There are {{ d['libs/howmanydataposts.py|py'] }} data files found between the dates set.
-
-<-- TODO Get this figure automatically -->
-
+There are {{ d['tracking.txt|dexy']['number-data-posts'] }} data files found between the dates set.
