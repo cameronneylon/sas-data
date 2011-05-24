@@ -1,4 +1,4 @@
-# Record of using sas.py to process data from SM6717-1
+# Utility methods for retrieving Data from SAS experiments from the LaBLog
 
 # Outline
 

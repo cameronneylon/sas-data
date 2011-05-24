@@ -1,15 +1,18 @@
 ### @export "imports"
 from sas import *
 from proxy import *
+from numpy import *
 import urllib2
 import urllib
 from xml.etree import ElementTree as ET
 
+
+
 ### @export "test-proxy"
-if set_proxy(False):
-    pass
-else:
-    set_proxy(True)
+#if set_proxy(False):
+#    pass
+#else:
+#    set_proxy(True)
 
 ### @export "get-post-list"
 def getposts(blogurl, key, value, from_date, to_date):
@@ -57,4 +60,9 @@ def get_data(posturl):
     ### @export "gdfp-data-to-SASData"
     datafile = urllib2.urlopen(fileurl).readlines()
 
+    data = loadtxt(datafile, skiprows=3)
+    data_q = data[:,0]
+    data_i = data[:,1]
+
+    sas_data = ExpSasData(data_q, data_i)
 
