@@ -1,5 +1,4 @@
 from numpy import *
-import unittest
 import scipy.optimize as opt
 import copy as cp
 import matplotlib.pyplot as plt
@@ -139,8 +138,33 @@ class ExpSasData(SasData):
         masked data at self.masked"""
 
         SasData.__init__(self, q, i)
+        self.id = ''
+        self.instrument = ''
         self.mask = []
         self.masked = SasData([],[])
+
+    def set_id(self, id):
+        try:
+            assert (type(id) == float) or (type(id) == str)
+        except AssertionError:
+            raise TypeError
+
+        self.id = str(id)
+
+    def get_id(self):
+        return self.id
+
+    def set_instrument(self, instrument):
+        try:
+            assert type(instrument) == str
+            assert instrument in {'loq', 'sans2d', 'i22'}
+        except AssertionError:
+            raise TypeError
+
+        self.instrument = instrument
+
+    def get_instrument(self):
+        return self.instrument
 
     #################################################
     #
@@ -206,7 +230,7 @@ class ExpSasData(SasData):
 #
 ##################################################
 
-def load():
+def load_file():
     """A generic loader that will call specific loaders.
 
     The function will call tkFileDialog.askopenfilename() to 
@@ -459,3 +483,4 @@ def fit_guinier(data):
 
     return least_squares_fit
 
+    
