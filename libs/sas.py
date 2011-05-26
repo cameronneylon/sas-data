@@ -6,8 +6,9 @@ from matplotlib import scale as mscale
 from matplotlib import transforms as mtransforms
 import matplotlib.figure as fig
 import matplotlib.axes as maxes
-from pylab import *
+import matplotlib.ticker as mticker
 import tkFileDialog as tkfd
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 class SasData(object):
     """Root class for data object for holding 1-d Q versus I SAS data.
@@ -345,15 +346,14 @@ class SasPlot(fig.Figure):
 
         """
 
+        fig.Figure.__init__(self)
 
-        self.figure = plt.figure()
-        self.axes = self.figure.add_subplot(1,1,1)
-        self.axes.plot(data.q, data.i, format)
-        plt.ylabel('I')
-        plt.xlabel('Q')
+        self.ax = self.add_subplot(111)
+        self.ax.plot(data.q, data.i, format)
+        self.ax.set_ylabel('I')
+        self.ax.set_xlabel('Q')
         # plt.title(name of data_to_plot) - how do I do this?
-        plt.draw()
-
+        self.canvas = FigureCanvasAgg(self)
         # setup a list for holding the data for this plot
         # self.data.append(name of data_to_plot)
 
@@ -369,9 +369,9 @@ class SasPlot(fig.Figure):
         to base e log and a squared scale on y and x axes respectively.
         """
 
-        self.axes.set_yscale('log', basey=e)
-        self.axes.set_xscale('q_squared')
-        plt.draw()
+        self.ax.set_yscale('log', basey=e)
+        self.ax.set_xscale('q_squared')
+
 
 
 class SquaredScale(mscale.ScaleBase):
@@ -393,17 +393,24 @@ class SquaredScale(mscale.ScaleBase):
 
     def __init__(self, axis, **kwargs):
         mscale.ScaleBase.__init__(self)
+        thresh = kwargs.pop("thresh", 0)
+        if thresh < 0:
+            raise ValueError("thresh must be greater than 0")
+        self.thresh = thresh
 
+    def get_transform(self):
+        """Set the actual transform for the axis coordinates.
+
+        """
+        return self.SquaredTransform(self.thresh)
 
     def set_default_locators_and_formatters(self, axis):
         """
         Set the locators and formatters to reasonable defaults for
         scaling. Not really too sure what these do at the moment.
         """
-        axis.set_major_locator(AutoLocator())
-        axis.set_major_formatter(ScalarFormatter())
-        axis.set_minor_locator(NullLocator())
-        axis.set_minor_formatter(NullFormatter())
+        axis.set_major_locator(mticker.AutoLocator())
+        axis.set_major_formatter(mticker.ScalarFormatter())
 
     def limit_range_for_scale(self, vmin, vmax, minpos):
         return  0, vmax
@@ -412,6 +419,10 @@ class SquaredScale(mscale.ScaleBase):
         input_dims = 1
         output_dims = 1
         is_separable = True
+
+        def __init__(self, thresh):
+            mtransforms.Transform.__init__(self)
+            self.thresh = thresh
 
         def transform(self, a): return a**2
 
@@ -423,19 +434,17 @@ class SquaredScale(mscale.ScaleBase):
         output_dims = 1
         is_separable = True
 
+        def __init__(self, thresh):
+            mtransforms.Transform.__init__(self)
+            self.thresh = thresh
 
         def transform(self, a): 
             return sqrt(a)    
 
-
         def inverted(self):
             return SquaredScale.SquaredTransform()
 
-    def get_transform(self):
-        """Set the actual transform for the axis coordinates.
 
-        """
-        return self.SquaredTransform()
 
 mscale.register_scale(SquaredScale)
 

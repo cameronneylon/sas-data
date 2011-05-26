@@ -1,7 +1,6 @@
 ### @export "imports"
 from libs.utils import *
 tracking = open('tracking.txt', 'w')
-print "hello world"
 
 ### @export "set-blog-url"
 BLOG_URL = "http://biolab.isis.rl.ac.uk/camerons_labblog"
@@ -66,11 +65,10 @@ for data in list2:
 
 ### @export "plotting-curve"
 test = SasPlot(subtracted_data[0])
-test.axes.set_autoscale_on(False)
-test.axes.set_ybound(0)
-test.axes.set_xbound(0.01)
-test.axes.loglog()
-test.figure.savefig("test.png")
+test.guinier_plot()
+test.ax.set_ybound(0.01)
+test.ax.set_xbound(0.01, 0.05)
+test.canvas.print_figure("test.png")
 
 tracking.close()
 
