@@ -1,6 +1,6 @@
 ### @export "imports"
-from libs.sas import *
-from libs.proxy import *
+from biosas.sas import *
+from biosas.proxy import *
 from numpy import *
 import urllib2
 import urllib

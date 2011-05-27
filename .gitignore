@@ -1,0 +1,4 @@
+*.pyc
+logs/
+artifacts/
+biosas.egg-info/

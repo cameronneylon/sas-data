@@ -1,4 +1,0 @@
-{
-  "*.py|py" : {
-    "env": {"PYTHONPATH" : "../libs"}}
-}

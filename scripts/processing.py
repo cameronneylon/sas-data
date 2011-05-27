@@ -1,6 +1,6 @@
 ### @export "imports"
-from libs.utils import *
-tracking = open('tracking.txt', 'w')
+from biosas.utils import *
+tracking = open('dexy--tracking.txt', 'w')
 
 ### @export "set-blog-url"
 BLOG_URL = "http://biolab.isis.rl.ac.uk/camerons_labblog"
@@ -68,7 +68,7 @@ test = SasPlot(subtracted_data[0])
 test.guinier_plot()
 test.ax.set_ybound(0.01)
 test.ax.set_xbound(0.01, 0.05)
-test.canvas.print_figure("test.png")
+test.canvas.print_figure("dexy--test.png")
 
 tracking.close()
 

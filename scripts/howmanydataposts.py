@@ -1,4 +1,4 @@
-from utils import *
+from biosas.utils import *
 
 ### @export "set-blog-url"
 BLOG_URL = "http://biolab.isis.rl.ac.uk/camerons_labblog"

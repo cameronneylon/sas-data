@@ -3,10 +3,10 @@
   "*.py|pyg" : {},
   "*.sh|pyg" : {},
   "*.py|idio" : {},
-  "*.py|idio|py" : {
-     "env" : {"PYTHONPATH" : "../"}},
+  "*.py|fn|idio|py" : {
+     "env" : {"PYTHONPATH" : "../:../libs/"}},
   "*.txt|idio" : {},
-  "*.md|jinja|markdown|hd|ft" : {
+  "*.md|fn|jinja|markdown|hd|ft" : {
     "allinputs" : true
   },
   "_header.html|dexy" : {},
