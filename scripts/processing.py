@@ -1,29 +1,43 @@
 ### @export "imports"
 from biosas.utils import *
-tracking = open('dexy--tracking.txt', 'w')
+import json
+
+tracking = {} # change this to 'info' or 'run_info' maybe?
 
 ### @export "set-blog-url"
 BLOG_URL = "http://biolab.isis.rl.ac.uk/camerons_labblog"
-FROM_DATE = datetime.datetime.strptime('2011-03-01', '%Y-%m-%d')
-TO_DATE = datetime.datetime.strptime('2011-06-01', '%Y-%m-%d')
+FROM_DATE_STRING = "2011-03-01"
+TO_DATE_STRING = "2011-06-01"
+
+def parse_date(date_string):
+    return datetime.datetime.strptime(date_string, '%Y-%m-%d')
+
+from_date = parse_date(FROM_DATE_STRING)
+to_date = parse_date(TO_DATE_STRING)
+
+tracking['blog-url'] = BLOG_URL
+tracking['from-date'] = FROM_DATE_STRING
+tracking['to-date'] = TO_DATE_STRING
 
 ### @export "retrieving-data-pages"
 saxs_data_posts = getposts(BLOG_URL, "DATA_TYPE", "SAXS_Diamond",
-                             FROM_DATE, TO_DATE) 
+                             from_date, to_date)
 ### @export end
 
-numposts = str(len(saxs_data_posts))
-tracking.write("""\n### @export "number-data-posts"\n%s""" % numposts)
+numposts = len(saxs_data_posts)
+tracking['num-posts'] = numposts
 
 sas_patterns = []
 name_mapping = {}
-tracking.write("""\n### @export "post-list"\n""")
+post_list = []
 for data_post in saxs_data_posts:
     sas_data_object = get_data(data_post)
     sas_patterns.append(sas_data_object)
     name = sas_data_object.get_id()
     name_mapping[name] = len(sas_patterns)-1
-    tracking.write("""%s, """ % name)
+    post_list.append(name)
+
+tracking['post-list'] = post_list
 
 ### @export "first-set-subtractions"
 subtracted_data = []
@@ -70,5 +84,8 @@ test.ax.set_ybound(0.01)
 test.ax.set_xbound(0.01, 0.05)
 test.canvas.print_figure("dexy--test.png")
 
-tracking.close()
+### @export "save-tracking-data"
+tracking_file = open("dexy--tracking.json", "w")
+json.dump(tracking, tracking_file)
+tracking_file.close()
 

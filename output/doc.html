@@ -71,21 +71,127 @@
 <h1>Getting the data post URLs</h1>
 <p>First we set a general blog URL and a date range to get data for.</p>
 <div class="highlight"><pre><a name="l-1"></a><span class="n">BLOG_URL</span> <span class="o">=</span> <span class="s">&quot;http://biolab.isis.rl.ac.uk/camerons_labblog&quot;</span>
-<a name="l-2"></a><span class="n">FROM_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s">&#39;2011-03-01&#39;</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
-<a name="l-3"></a><span class="n">TO_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s">&#39;2011-06-01&#39;</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
+<a name="l-2"></a><span class="n">FROM_DATE_STRING</span> <span class="o">=</span> <span class="s">&quot;2011-03-01&quot;</span>
+<a name="l-3"></a><span class="n">TO_DATE_STRING</span> <span class="o">=</span> <span class="s">&quot;2011-06-01&quot;</span>
+<a name="l-4"></a>
+<a name="l-5"></a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">date_string</span><span class="p">):</span>
+<a name="l-6"></a>    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_string</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
+<a name="l-7"></a>
+<a name="l-8"></a><span class="n">from_date</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">FROM_DATE_STRING</span><span class="p">)</span>
+<a name="l-9"></a><span class="n">to_date</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">TO_DATE_STRING</span><span class="p">)</span>
+<a name="l-10"></a>
+<a name="l-11"></a><span class="n">tracking</span><span class="p">[</span><span class="s">&#39;blog-url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BLOG_URL</span>
+<a name="l-12"></a><span class="n">tracking</span><span class="p">[</span><span class="s">&#39;from-date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FROM_DATE_STRING</span>
+<a name="l-13"></a><span class="n">tracking</span><span class="p">[</span><span class="s">&#39;to-date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TO_DATE_STRING</span>
 </pre></div>
 
 <p>For this experiment I need to get I22 SAXS data files. The key is DATA_TYPE and the value is SAXS_Diamond.</p>
 <div class="highlight"><pre><a name="l-1"></a><span class="n">saxs_data_posts</span> <span class="o">=</span> <span class="n">getposts</span><span class="p">(</span><span class="n">BLOG_URL</span><span class="p">,</span> <span class="s">&quot;DATA_TYPE&quot;</span><span class="p">,</span> <span class="s">&quot;SAXS_Diamond&quot;</span><span class="p">,</span>
-<a name="l-2"></a>                             <span class="n">FROM_DATE</span><span class="p">,</span> <span class="n">TO_DATE</span><span class="p">)</span> 
+<a name="l-2"></a>                             <span class="n">from_date</span><span class="p">,</span> <span class="n">to_date</span><span class="p">)</span>
 </pre></div>
 
-<p>There are <div class="highlight"><pre><a name="l-1"></a>33
-</pre></div>
- data files found between the dates set. Which are named:</p>
-<div class="highlight"><pre><a name="l-1"></a>I22-29552, I22 29553 - b4, I22 29554 - buffer, I22 29590 - A4, I22 29555 - b3, I22 29556 - empty capillary, I22 29557 - b2, I22 29558 - b1, I22 29559 - water, I22 29589 - A5, I22 29560 - b4, I22 29561 - buffer, I22 29562 - b3, I22 29588 - A6, I22 29563 - empty capillary, I22 29564 - b2, I22 29565 - b1, I22 29587 A7, I22 29567 - DLPC - lower counts, I22 29574 - A3 - seems ok, I22 29575 - a2, I22 29576 - a1, I22 29586 A8, I22 29577 - mono-olein, I22 29578 - DMPC, I22 29579 - b9, I22 29585 - A9, I22 29580 - b8, I22 29581 - b7, I22 29582 - b6, I22 29584-DLPC, I22 29583 - b5, I22 29591 BUFFER, 
-</pre></div>
-
+<p>There are 33 data files found between the dates set. Which are named:</p>
+<ul>
+<li>
+<p>I22-29552</p>
+</li>
+<li>
+<p>I22 29553 - b4</p>
+</li>
+<li>
+<p>I22 29554 - buffer</p>
+</li>
+<li>
+<p>I22 29590 - A4</p>
+</li>
+<li>
+<p>I22 29555 - b3</p>
+</li>
+<li>
+<p>I22 29556 - empty capillary</p>
+</li>
+<li>
+<p>I22 29557 - b2</p>
+</li>
+<li>
+<p>I22 29558 - b1</p>
+</li>
+<li>
+<p>I22 29559 - water</p>
+</li>
+<li>
+<p>I22 29589 - A5</p>
+</li>
+<li>
+<p>I22 29560 - b4</p>
+</li>
+<li>
+<p>I22 29561 - buffer</p>
+</li>
+<li>
+<p>I22 29562 - b3</p>
+</li>
+<li>
+<p>I22 29588 - A6</p>
+</li>
+<li>
+<p>I22 29563 - empty capillary</p>
+</li>
+<li>
+<p>I22 29564 - b2</p>
+</li>
+<li>
+<p>I22 29565 - b1</p>
+</li>
+<li>
+<p>I22 29587 A7</p>
+</li>
+<li>
+<p>I22 29567 - DLPC - lower counts</p>
+</li>
+<li>
+<p>I22 29574 - A3 - seems ok</p>
+</li>
+<li>
+<p>I22 29575 - a2</p>
+</li>
+<li>
+<p>I22 29576 - a1</p>
+</li>
+<li>
+<p>I22 29586 A8</p>
+</li>
+<li>
+<p>I22 29577 - mono-olein</p>
+</li>
+<li>
+<p>I22 29578 - DMPC</p>
+</li>
+<li>
+<p>I22 29579 - b9</p>
+</li>
+<li>
+<p>I22 29585 - A9</p>
+</li>
+<li>
+<p>I22 29580 - b8</p>
+</li>
+<li>
+<p>I22 29581 - b7</p>
+</li>
+<li>
+<p>I22 29582 - b6</p>
+</li>
+<li>
+<p>I22 29584-DLPC</p>
+</li>
+<li>
+<p>I22 29583 - b5</p>
+</li>
+<li>
+<p>I22 29591 BUFFER</p>
+</li>
+</ul>
 <p>Of these "I22 29554 - buffer", "I22 29561 - Buffer", and "I22 29591 BUFFER" are the buffer runs. The first of these was for a shorter collection time as are the runs up to 29558 according to the <a href="http://biolab.isis.rl.ac.uk/camerons_labblog/14220/SAXS_on_SMALP_samples_1.html">run record for the first set of samples</a>. </p>
 <p>The sample runs from 29560 to 29565 should have the buffer run 29561 subtracted.</p>
 <div class="highlight"><pre><a name="l-1"></a><span class="n">subtracted_data</span> <span class="o">=</span> <span class="p">[]</span>
@@ -128,7 +234,7 @@
 </pre></div>
 
 <p>Here is a graph</p>
-<p><img src="../artifacts/test.png"> </p>
+<p><img src="test.png"> </p>
   </body>
 </html>
 

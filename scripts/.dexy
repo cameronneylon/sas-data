@@ -1,0 +1,5 @@
+{
+  "*.py|fn|idio|py" : {
+     "env" : {"PYTHONPATH" : "../:../libs/"}
+  }
+}
