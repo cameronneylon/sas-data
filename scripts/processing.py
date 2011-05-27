@@ -40,7 +40,7 @@ for data_post in saxs_data_posts:
 tracking['post-list'] = post_list
 
 ### @export "first-set-subtractions"
-subtracted_data = []
+subtracted_data = {}
 list1 = ['I22 29560 - b4', 'I22 29562 - b3', 'I22 29564 - b2',
                'I22 29565 - b1']
 
@@ -49,7 +49,7 @@ background = 'I22 29561 - buffer'
 for data in list1:
     subtracted = sas_patterns[name_mapping[data]] - sas_patterns[
                                            name_mapping[background]]
-    subtracted_data.append(subtracted)
+    subtracted_data[data] = subtracted
 
 ### @export "second-set-subtractions"
 list2 = ['I22 29574 - A3 - seems ok',
@@ -75,14 +75,17 @@ background = 'I22 29591 BUFFER'
 for data in list2:
     subtracted = sas_patterns[name_mapping[data]] - sas_patterns[
                                            name_mapping[background]]
-    subtracted_data.append(subtracted)
+    subtracted_data[data] = subtracted
 
 ### @export "plotting-curve"
-test = SasPlot(subtracted_data[0])
-test.guinier_plot()
-test.ax.set_ybound(0.01)
-test.ax.set_xbound(0.01, 0.05)
-test.canvas.print_figure("dexy--test.png")
+for k, v in subtracted_data.items():
+    test = SasPlot(v)
+    test.guinier_plot()
+    test.ax.set_ybound(0.01)
+    test.ax.set_xbound(0.01, 0.05)
+    test.canvas.print_figure("%s.png" % k)
+
+tracking['plot-names'] = subtracted_data.keys()
 
 ### @export "save-tracking-data"
 tracking_file = open("dexy--tracking.json", "w")

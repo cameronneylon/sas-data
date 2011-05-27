@@ -31,7 +31,8 @@ The second set of runs are handled similarly
 
 {{ d['scripts/processing.py|idio']['second-set-subtractions'] }}
 
-Here is a graph
+{% for plot_name in d['tracking']['plot-names'] %}
+### {{ plot_name }}
 
-<img src="test.png"> 
-
+<img src="../artifacts/{{ plot_name }}.png" />
+{% endfor %}
